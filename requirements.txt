@@ -1,21 +1,3 @@
-asgiref==3.7.2
-black==24.2.0
-click==8.1.7
-colorama==0.4.6
-Django==4.2.10
-django-bootstrap5==23.4
-mypy-extensions==1.0.0
-packaging==23.2
-pathspec==0.12.1
-platformdirs==4.2.0
-sqlparse==0.4.4
-tzdata==2024.1
-pillow==10.2.0
-pandas
-requests==2.31.0
-django-debug-toolbar
-django-extensions
-
-#mysql
-pymysql
-cryptography
+version https://git-lfs.github.com/spec/v1
+oid sha256:6ddffb4fd1010d7c74a02ac17fac1fbe9a14e6df871eb95b30fe5d44cc4bf7b2
+size 330

@@ -21,24 +21,25 @@ def get_code_and_name_from_csv(zipcode_csv_path: str) -> Iterator[Tuple[str, str
         csv_reader = csv.DictReader(csvfile, delimiter="|")
         row: Dict
         for row in csv_reader:
-            code = row["우편번호"]
-            name = "{시도} {시군구} {도로명}".format(**row)
-            yield code, name
+            if row["시군구"] == "연수구" :
+                code = row["우편번호"]
+                name = "인천시 {시군구} {도로명} {건물번호본번} {시군구용건물명} ({법정동명})".format(**row)
+                yield code, name
 
 
 def main():
-    # 파이썬으로 샘플 5000줄을 다운받아 csv_path 경로에 저장합니다. (원본: 531,487줄)
-    sample_csv_url = "https://raw.githubusercontent.com/pyhub-kr/dump-data/main/zipcode_db/20231205/%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C-5000%ED%96%89.txt"
-    csv_path = "shop/assets/zipcode_db/20231205/서울특별시.txt"  # 원본: 531,487줄
+    # 파이썬으로 샘플을 다운받아 csv_path 경로에 저장합니다. (원본: 531,487줄)
+    sample_csv_url = "https://media.githubusercontent.com/media/Hae-jin-park/mydjango04-core/main/data/%EC%9D%B8%EC%B2%9C%EA%B4%91%EC%97%AD%EC%8B%9C.txt"
+    csv_path = "shop/assets/zipcode_db/인천.txt"  # 원본: 531,487줄
 
-    os.makedirs(os.path.dirname(csv_path), exist_ok=True)  # 파일을 저장할 폴더를 생성해줍니다.
-    urlretrieve(sample_csv_url, csv_path)  # sample_csv_url 경로에서 파일을 다운받아, 지정 경로에 저장합니다.
+    os.makedirs(
+        os.path.dirname(csv_path), exist_ok=True
+    )  # 파일을 저장할 폴더를 생성해줍니다.
+    urlretrieve(
+        sample_csv_url, csv_path
+    )  # sample_csv_url 경로에서 파일을 다운받아, 지정 경로에 저장합니다.
 
     generator = get_code_and_name_from_csv(csv_path)
-
-    print(next(generator))  # 처음 1줄을 가져옵니다.
-    print(next(generator))  # 다음 1줄을 가져옵니다.
-    print(next(generator))  # 다음 1줄을 가져옵니다.
 
     for row in generator:
         print(row)
