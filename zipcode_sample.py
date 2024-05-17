@@ -21,9 +21,9 @@ def get_code_and_name_from_csv(zipcode_csv_path: str) -> Iterator[Tuple[str, str
         csv_reader = csv.DictReader(csvfile, delimiter="|")
         row: Dict
         for row in csv_reader:
-            if row["시군구"] == "연수구" :
+            # if row["시군구"] == "연수구" :
                 code = row["우편번호"]
-                name = "인천시 {시군구} {도로명} {건물번호본번} {시군구용건물명} ({법정동명})".format(**row)
+                name = "{시도} {시군구} {도로명} {건물번호본번} {시군구용건물명} ({법정동명})".format(**row)
                 yield code, name
 
 
