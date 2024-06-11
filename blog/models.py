@@ -1,31 +1,16 @@
-from django.conf import settings
+# blog/models.py
+
 from django.db import models
 
-
-class PostQuerySet(models.QuerySet):
-    def published(self):
-        return self.filter(status=Post.Status.PUBLISHED)
-
-    def draft(self):
-        return self.filter(status=Post.Status.DRAFT)
-
-    def search(self, query: str):
-        return self.filter(title__contains=query)
+class PublishedPostManager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(status=Post.Status.PUBLISHED)
+        return qs
 
     def create(self, **kwargs):
         kwargs.setdefault("status", Post.Status.PUBLISHED)
         return super().create(**kwargs)
-
-
-# class PublishedPostManager(models.Manager):
-#     def get_queryset(self):
-#         qs = super().get_queryset()
-#         qs = qs.filter(status=Post.Status.PUBLISHED)
-#         return qs
-
-#     def create(self, **kwargs):
-#         kwargs.setdefault("status",Post.Status.PUBLISHED)
-#         return super().create(**kwargs)
 
 
 class Post(models.Model):
@@ -33,7 +18,6 @@ class Post(models.Model):
         DRAFT = "D", "초안"  # 상수, 값, 레이블
         PUBLISHED = "P", "발행"
 
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     status = models.CharField(
         # 선택지 값 크기에 맞춰 최대 길이를 지정
@@ -49,9 +33,8 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # 최초 생성시각을 자동 저장
     updated_at = models.DateTimeField(auto_now=True)  # 매 수정시각을 자동 저장
 
-    # published = PublishedPostManager()
-    # objects = models.Manager()
-    objects = PostQuerySet.as_manager()
+    published = PublishedPostManager()
+    objects = models.Manager();
 
     def __str__(self):
         # choices 속성을 사용한 필드는 get_필드명_display() 함수를 통해 레이블 조회를 지원합니다.
